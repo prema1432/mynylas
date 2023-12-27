@@ -125,6 +125,6 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-NYLAS_CLIENT_ID = 'a0all0i9rr80wi2shf0q64dbu'
-NYLAS_CLIENT_SECRET = '5a03akeixeohp4v08psyy6622'
+NYLAS_CLIENT_ID = '2cckevnadyqhxkirlh33pcr2k'
+NYLAS_CLIENT_SECRET = 'a9giasz46c3hzmt4rc5gimchd'
 # NYLAS_ACCESS_TOKEN = get_nylas_access_token(NYLAS_CLIENT_ID, NYLAS_CLIENT_SECRET)

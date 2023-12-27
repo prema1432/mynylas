@@ -36,7 +36,7 @@ def start_authorization(request):
     print("redirect_uri",redirect_uri)
     authorization_url = (
         f'https://api.nylas.com/oauth/authorize?'
-        f'client_id={NYLAS_CLIENT_ID}&redirect_uri={redirect_uri}&response_type=code&login_hint=premanatht@yopmail.com'
+        f'client_id={NYLAS_CLIENT_ID}&redirect_uri={redirect_uri}&response_type=code&login_hint=premanath@myyahoo.com'
     )
     print("authorization_url",authorization_url)
     payload = {}
