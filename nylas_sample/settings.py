@@ -27,7 +27,7 @@ SECRET_KEY = "django-insecure-wvx2fd470*r)8va8#@uht!ch$w_%5t-h9(#jueujgi%66-vnqq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['shaky-paths-stand.loca.lt']
+ALLOWED_HOSTS = ['mynylastest.onrender.com']
 
 
 # Application definition
