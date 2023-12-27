@@ -36,7 +36,7 @@ def start_authorization(request):
     print("redirect_uri",redirect_uri)
     authorization_url = (
         f'https://api.nylas.com/oauth/authorize?'
-        f'client_id={NYLAS_CLIENT_ID}&redirect_uri={redirect_uri}&response_type=code&login_hint=talamarla.premanath@gmail.com'
+        f'client_id={NYLAS_CLIENT_ID}&redirect_uri={redirect_uri}&response_type=code&login_hint=premanatht@yopmail.com'
     )
     print("authorization_url",authorization_url)
     payload = {}
@@ -53,6 +53,8 @@ def start_authorization(request):
 
 
 def handle_authorization(request):
+    print("requessssss",request)
+    print("requessssss",request.data)
     # Handle the authorization code received from Nylas and exchange it for an access token
     authorization_code = request.GET.get('code')
     # ... perform the token exchange and other logic ...
