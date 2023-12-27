@@ -32,7 +32,7 @@ def read_emails(request):
 
 def start_authorization(request):
     # Construct the authorization URL
-    redirect_uri = 'http://localhost:8000/handle-authorization'  # Change to your desired URL
+    redirect_uri = 'https://mynylass.onrender.com/handle-authorization'  # Change to your desired URL
     print("redirect_uri",redirect_uri)
     authorization_url = (
         f'https://api.nylas.com/oauth/authorize?'
