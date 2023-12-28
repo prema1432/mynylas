@@ -11,7 +11,7 @@ from nylas_sample.utils import get_nylas_access_token
 
 
 def read_emails(request):
-    nyls_access_token = "MzsR78ic9PNE8Q7zg8ILlV9x98BPwB"
+    nyls_access_token = "i5BxeE9hjhWiji2CQhxdNdGKhc5jD5"
     print("access_tokenaccess_tokenaccess_token", nyls_access_token)
     # Initialize Nylas client
     nylas_client = nylas.APIClient(
@@ -174,7 +174,7 @@ def handle_authorization(request):
     return HttpResponse(f'Authorization Code: {authorization_code}')
 
 def send_email(request):
-    nyls_access_token = "MzsR78ic9PNE8Q7zg8ILlV9x98BPwB"
+    nyls_access_token = "i5BxeE9hjhWiji2CQhxdNdGKhc5jD5"
 
     if request.method == 'POST':
         # Replace 'YOUR_CLIENT_ID' and 'YOUR_CLIENT_SECRET' with your actual Nylas API credentials
