@@ -5,7 +5,18 @@
     <title>All Nylas Accounts</title>
 </head>
 <body>
-    <h1>All Nylas Accounts</h1>
+<h1>
+    My Nylas Accounts
+</h1>
+<hr>
+
+<p>
+    <a class="button" href="{% url 'send_email' %}">Send Mail</a> &nbsp;
+    <a class="button" href="{% url 'read_emails' %}">Read Mail</a> &nbsp;
+    <a class="button" href="{% url 'all_nylas_accounts' %}">All Accounts</a> &nbsp;
+
+</p><hr>
+
     <table border="1">
         <thead>
             <tr>
@@ -15,6 +26,7 @@
                 <th>provider</th>
                 <th>sync_state</th>
                                 <th>Delete</th>
+                <th>Retry Sync</th>
 
             </tr>
         </thead>
@@ -32,6 +44,13 @@
                             {% csrf_token %}
                             <input type="hidden" name="delete_account_id" value="{{ account.id }}">
                             <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                <td>
+                        <form method="post" action="{% url 'all_nylas_accounts' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="retry_sync_account_id" value="{{ account.id }}">
+                            <button type="submit">Retry Sync</button>
                         </form>
                     </td>
                 </tr>

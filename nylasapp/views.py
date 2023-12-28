@@ -67,7 +67,7 @@ def read_emails(request):
             # account = nylas_client.as_account(username, password)
 
             try:
-                email_list = nylas_client.messages.all()
+                email_list = nylas_client.messages.all(limit=15)
                 print("email_list 876yijh" ,email_list)
                 inbox_emails = [
                     {
@@ -345,6 +345,7 @@ def all_nylas_accounts(request):
     if request.method == 'POST':
         # Handle account deletion
         account_id_to_delete = request.POST.get('delete_account_id')
+
         if account_id_to_delete:
             print("account_id_to_delete",account_id_to_delete)
             try:
@@ -360,6 +361,27 @@ def all_nylas_accounts(request):
                 # Handle errors, e.g., account not found or API request failed
                 print(f"Error deleting account: {str(e)}")
 
+        # Handle account retry sync
+        account_id_to_retry_sync = request.POST.get('retry_sync_account_id')
+        if account_id_to_retry_sync:
+            try:
+                selected_user_account = UserAccount.objects.get(account_id=account_id_to_retry_sync)
+                nylas_access_token = selected_user_account.access_token
+                nylas_client_1 = nylas.APIClient(
+                    client_id=NYLAS_CLIENT_ID,
+                    client_secret=NYLAS_CLIENT_SECRET,
+                    access_token=nylas_access_token,
+                )
+                print("nylas_client_1",nylas_client_1)
+
+                account_to_retry_sync = nylas_client_1.accounts.get(account_id_to_retry_sync)
+                print(f"Account to retry sync",account_to_retry_sync)
+                account_to_retry_sync.sync()
+                # Retry syncing the account
+                # nylas_client.accounts.retry_sync(account_id_to_retry_sync)
+            except Exception as e:
+                # Handle errors, e.g., account not found or API request failed
+                print(f"Error retrying sync for account: {str(e)}")
     nylas_accounts = nylas_client.accounts.all()
 
     account_data = [
@@ -369,7 +391,6 @@ def all_nylas_accounts(request):
             'billing_state': account.billing_state,
             'provider': account.provider,
             'sync_state': account.sync_state,
-            # Add more fields as needed
         }
         for account in nylas_accounts
     ]
