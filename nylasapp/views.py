@@ -38,35 +38,45 @@ def read_emails(request):
     # nylas_access_token = ""
     inbox_emails ={}
 
-
+    errors= None
     if request.method == 'POST':
         form = UserAccountForm(request.POST)
         if form.is_valid():
             selected_email_address = form.cleaned_data['user_account']
+            print("selected_email_addressselected_email_address",selected_email_address)
             # Retrieve all fields of the selected UserAccount object
             selected_user_account = UserAccount.objects.get(email_address=selected_email_address)
             # Update nylas_access_token based on the selected user account
             nylas_access_token = selected_user_account.access_token
+            print("nylas_access_token",nylas_access_token)
             nylas_client = nylas.APIClient(
                 client_id=NYLAS_CLIENT_ID,
                 client_secret=NYLAS_CLIENT_SECRET,
                 access_token=nylas_access_token
             )
-            email_list = nylas_client.messages.all()
-            inbox_emails = [
-                {
-                    'subject': message.subject,
-                    'date': message.date,
-                    'from_mail': message.from_email,
-                }
-                for message in email_list
-            ]
+
+            try:
+                email_list = nylas_client.messages.all()
+                print("email_list 876yijh" ,email_list)
+                inbox_emails = [
+                    {
+                        'subject': message.subject,
+                        'date': message.date,
+                        'from_mail': message.from_email,
+                    }
+                    for message in email_list
+                ]
+            except Exception as e:
+                errors =str(e)
+                print("exception occured as",e)
+        else:
+            print(" uhkjhjkhjkhjkhkjh",form.errors)
     else:
         form = UserAccountForm()
 
 
 
-    return render(request, 'my_messages.html', {'email_list': inbox_emails, 'form': form})
+    return render(request, 'my_messages.html', {'email_list': inbox_emails, 'form': form,"errors":errors})
 
 # def start_authorization(request):
 #     host_name = request.get_host()

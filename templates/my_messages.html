@@ -34,6 +34,9 @@
   {{ form.as_p }}
   <input type="submit" value="Submit">
 </form>
+{%  if errors %}
+<p style="color: red;font-weight: bold">{{ errors }}</p>
+{% endif %}
 
 <p><a class="button" href="{% url 'send_email' %}">Send Mail</a> &nbsp;<a class="button" href="{% url 'read_emails' %}">Read Mail</a></p>
 <hr>
