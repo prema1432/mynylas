@@ -125,13 +125,27 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-
 STATIC_URL = "static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Allow all domains for development
+# CORS_ALLOW_ALL_ORIGINS = True
+
+
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Static files (CSS, JavaScript, images)
+# https://docs.djangoproject.com/en/3.2/howto/static-files/
+
+# ...
+
+# Define the STATIC_ROOT setting
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 NYLAS_CLIENT_ID = '5j47yx36dw04zpg9kfjqcbcod'
 NYLAS_CLIENT_SECRET = '7umaunsep02sqcq9z3gc1u8yf'
