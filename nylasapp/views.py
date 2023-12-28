@@ -165,7 +165,7 @@ def yahoo_start_authorization(request):
 
 def handle_authorization(request):
     print("requessssss", request)
-    print("requessssss", request.data)
+    # print("requessssss", request.data)
     # Handle the authorization code received from Nylas and exchange it for an access token
     authorization_code = request.GET.get('code')
     # ... perform the token exchange and other logic ...
