@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import dj_database_url
 
 from nylas_sample.utils import get_nylas_access_token
 
@@ -77,12 +78,18 @@ WSGI_APPLICATION = "nylas_sample.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
+DATABASE_URL = "postgres://prema_postgre_sql_db_user:wJq4n1wJiKXT0YszkEbKMeRrrOfq0mrH@dpg-clfjui6f27hc739d4krg-a.singapore-postgres.render.com/prema_postgre_sql_db"
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+    'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600),
 }
+
 
 
 # Password validation
