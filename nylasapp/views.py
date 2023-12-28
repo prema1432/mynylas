@@ -247,7 +247,7 @@ def handle_authorization(request):
     return HttpResponse(f'Authorization Code: {authorization_code}, Access Data:{access_data}')
 
 def send_email(request):
-    nyls_access_token = "i5BxeE9hjhWiji2CQhxdNdGKhc5jD5"
+    # nyls_access_token = "i5BxeE9hjhWiji2CQhxdNdGKhc5jD5"
 
     if request.method == 'POST':
         # Replace 'YOUR_CLIENT_ID' and 'YOUR_CLIENT_SECRET' with your actual Nylas API credentials
