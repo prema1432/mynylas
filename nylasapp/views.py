@@ -44,12 +44,22 @@ def read_emails(request):
 
 
 def start_authorization(request):
+    host_name = request.get_host()
+    print(":host_name", host_name)
+    if 'HTTP_X_FORWARDED_PROTO' in request.META:
+        protocol = request.META['HTTP_X_FORWARDED_PROTO']
+    else:
+        # If the header is not present, use the scheme attribute
+        protocol = request.scheme
+
+    print("protocolprotocolprotocol", protocol)
+
     # Construct the authorization URL
-    redirect_uri = 'https://mynylass.onrender.com/handle-authorization/'  # Change to your desired URL
+    redirect_uri = f'{protocol}://{host_name}/handle-authorization/'  # Change to your desired URL
     print("redirect_uri", redirect_uri)
     authorization_url = (
         f'https://api.nylas.com/oauth/authorize?'
-        f'client_id={NYLAS_CLIENT_ID}&redirect_uri={redirect_uri}&response_type=code&login_hint=premanath@myyahoo.com'
+        f'client_id={NYLAS_CLIENT_ID}&redirect_uri={redirect_uri}&response_type=code'
     )
     print("authorization_url", authorization_url)
     payload = {}
