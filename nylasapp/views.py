@@ -168,9 +168,26 @@ def handle_authorization(request):
     # print("requessssss", request.data)
     # Handle the authorization code received from Nylas and exchange it for an access token
     authorization_code = request.GET.get('code')
-    # ... perform the token exchange and other logic ...
+    try:
+        url = f"https://api.nylas.com/oauth/token?client_id={NYLAS_CLIENT_ID}&client_secret={NYLAS_CLIENT_SECRET}&grant_type=authorization_code&code={authorization_code}"
+        print("url",url)
+        payload = ""
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': f'Bearer {authorization_code}'
+        }
 
-    # Example: Display the authorization code (remove this in a production environment)
+        response = requests.request("POST", url, headers=headers, data=payload)
+        print("response",response)
+        print("response",response.json())
+        print("response",response.status_code)
+
+        print(response.text)
+
+    except Exception as e:
+        print("Exception occured in the call back url",e)
+
     return HttpResponse(f'Authorization Code: {authorization_code}')
 
 def send_email(request):
