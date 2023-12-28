@@ -54,6 +54,17 @@ def read_emails(request):
                 client_secret=NYLAS_CLIENT_SECRET,
                 access_token=nylas_access_token
             )
+            try:
+                account = nylas_client.account
+
+                print("accoun 4353534t",account)
+                print("account",account.id)
+                print("account",account.email_address)
+                print("account",account.provider)
+                print("account",account.sync_state)
+            except Exception as er:
+                print("exception errrr",er)
+            # account = nylas_client.as_account(username, password)
 
             try:
                 email_list = nylas_client.messages.all()
