@@ -8,40 +8,65 @@ import nylas
 
 from nylas_sample.settings import NYLAS_CLIENT_ID, NYLAS_CLIENT_SECRET
 from nylas_sample.utils import get_nylas_access_token
+from nylasapp.forms import UserAccountForm
+from nylasapp.models import UserAccount
 
+
+# def read_emails(request):
+#
+#     nyls_access_token = "i5BxeE9hjhWiji2CQhxdNdGKhc5jD5"
+#     # print("access_tokenaccess_tokenaccess_token", nyls_access_token)
+#     nylas_client = nylas.APIClient(
+#         client_id=NYLAS_CLIENT_ID,
+#         client_secret=NYLAS_CLIENT_SECRET,
+#         access_token=nyls_access_token
+#
+#     )
+#     email_list = nylas_client.messages.all()
+#     inbox_emails = [
+#         {
+#             'subject': message.subject,
+#             'date': message.date,
+#             'from_mail': message.from_email,
+#         }
+#         for message in email_list
+#     ]
+#     return render(request, 'my_messages.html', {'email_list': inbox_emails})
 
 def read_emails(request):
-    nyls_access_token = "i5BxeE9hjhWiji2CQhxdNdGKhc5jD5"
-    print("access_tokenaccess_tokenaccess_token", nyls_access_token)
-    # Initialize Nylas client
-    nylas_client = nylas.APIClient(
-        client_id=NYLAS_CLIENT_ID,
-        client_secret=NYLAS_CLIENT_SECRET,
-        access_token=nyls_access_token
+    # nylas_access_token = "i5BxeE9hjhWiji2CQhxdNdGKhc5jD5"
+    # nylas_access_token = ""
+    inbox_emails ={}
 
-    )
-    # return HttpResponse(f'Inbox Emails:<br>{nylas_client}')
-    # # Example: Read emails from the inbox
-    email_list = nylas_client.messages.all()
-    # print("messagestype", type(email_list))
-    # print("messages", email_list)
-    # inbox_emails = [{'subject': message.subject, 'body': message.body} for message in messages]
-    inbox_emails = [
-        {
-            'subject': message.subject,
-            'date': message.date,
-            'from_mail': message.from_email,
-        }
-        for message in email_list
-    ]
-    # inbox_emails = [{'subject': message.subject,"date":message.date,"from_mail":message.from_email} for message in email_list]
-    # #
-    # # # Render the emails in a simple HTML format
-    # email_list = "<br>".join([f"<b>{email['subject']}</b>" for email in inbox_emails])
-    #
-    # return HttpResponse(f'Inbox Emails:<br>{messages}')
-    return render(request, 'my_messages.html', {'email_list': inbox_emails})
 
+    if request.method == 'POST':
+        form = UserAccountForm(request.POST)
+        if form.is_valid():
+            selected_email_address = form.cleaned_data['user_account']
+            # Retrieve all fields of the selected UserAccount object
+            selected_user_account = UserAccount.objects.get(email_address=selected_email_address)
+            # Update nylas_access_token based on the selected user account
+            nylas_access_token = selected_user_account.access_token
+            nylas_client = nylas.APIClient(
+                client_id=NYLAS_CLIENT_ID,
+                client_secret=NYLAS_CLIENT_SECRET,
+                access_token=nylas_access_token
+            )
+            email_list = nylas_client.messages.all()
+            inbox_emails = [
+                {
+                    'subject': message.subject,
+                    'date': message.date,
+                    'from_mail': message.from_email,
+                }
+                for message in email_list
+            ]
+    else:
+        form = UserAccountForm()
+
+
+
+    return render(request, 'my_messages.html', {'email_list': inbox_emails, 'form': form})
 
 # def start_authorization(request):
 #     host_name = request.get_host()
@@ -168,6 +193,7 @@ def handle_authorization(request):
     # print("requessssss", request.data)
     # Handle the authorization code received from Nylas and exchange it for an access token
     authorization_code = request.GET.get('code')
+    access_data = ""
     try:
         url = f"https://api.nylas.com/oauth/token?client_id={NYLAS_CLIENT_ID}&client_secret={NYLAS_CLIENT_SECRET}&grant_type=authorization_code&code={authorization_code}"
         print("url",url)
@@ -182,21 +208,40 @@ def handle_authorization(request):
         print("response",response)
         print("response",response.json())
         print("response",response.status_code)
+        access_data =response.json()
+        # print(response.text)
+        try:
+            # {'access_token': 'QGUCk8iK7c4iEWYqjAQ7dYyU4Pnph6', 'account_id': '8pc9hg23yko29vx57n58ne67h',
+            #  'email_address': 'talamarla.premanath@gmail.com', 'provider': 'gmail', 'token_type': 'bearer'}
+            lookup_field = 'email_address'
+            email_address = access_data[lookup_field]
 
-        print(response.text)
+            defaults = {
+                'access_token': access_data['access_token'],
+                'account_id': access_data['account_id'],
+                'provider': access_data['provider'],
+                'token_type': access_data['token_type'],
+            }
+
+            user_account, created = UserAccount.objects.update_or_create(
+                **{lookup_field: email_address},
+                defaults=defaults
+            )
+            # UserAccount.objects.create()
+        except Exception as e:
+            print("Exception occureddownloading data",e)
 
     except Exception as e:
         print("Exception occured in the call back url",e)
 
-    return HttpResponse(f'Authorization Code: {authorization_code}')
+    return HttpResponse(f'Authorization Code: {authorization_code}, Access Data:{access_data}')
 
 def send_email(request):
     nyls_access_token = "i5BxeE9hjhWiji2CQhxdNdGKhc5jD5"
 
     if request.method == 'POST':
         # Replace 'YOUR_CLIENT_ID' and 'YOUR_CLIENT_SECRET' with your actual Nylas API credentials
-        client_id = 'YOUR_CLIENT_ID'
-        client_secret = 'YOUR_CLIENT_SECRET'
+
         #
         # nylas_client = nylas.APIClient(client_id=client_id, client_secret=client_secret)
         nylas_client = nylas.APIClient(

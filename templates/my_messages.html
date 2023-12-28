@@ -29,6 +29,12 @@
     My Nylas Mails
 </h1>
 <hr>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="Submit">
+</form>
+
 <p><a class="button" href="{% url 'send_email' %}">Send Mail</a> &nbsp;<a class="button" href="{% url 'read_emails' %}">Read Mail</a></p>
 <hr>
 {#<P>{{ email_list }}</P>#}
