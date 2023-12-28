@@ -43,38 +43,55 @@ def read_emails(request):
     return render(request, 'my_messages.html', {'email_list': inbox_emails})
 
 
+# def start_authorization(request):
+#     host_name = request.get_host()
+#     print(":host_name", host_name)
+#     if 'HTTP_X_FORWARDED_PROTO' in request.META:
+#         protocol = request.META['HTTP_X_FORWARDED_PROTO']
+#     else:
+#         # If the header is not present, use the scheme attribute
+#         protocol = request.scheme
+#
+#     print("protocolprotocolprotocol", protocol)
+#
+#     # Construct the authorization URL
+#     redirect_uri = f'{protocol}://{host_name}/handle-authorization/'  # Change to your desired URL
+#     print("redirect_uri", redirect_uri)
+#     authorization_url = (
+#         f'https://api.nylas.com/oauth/authorize?'
+#         f'client_id={NYLAS_CLIENT_ID}&redirect_uri={redirect_uri}&response_type=code'
+#     )
+#     print("authorization_url", authorization_url)
+#     payload = {}
+#     headers = {
+#         'Content-Type': 'application/json',
+#         'Accept': 'application/json',
+#     }
+#     response = requests.request("GET", authorization_url, headers=headers, data=payload)
+#
+#     print('fhjsdgfjgskd fghjksdghj', response.json())
+#
+#     # Redirect the user to the Nylas authorization URL
+#     return HttpResponse(f'response: {response.json()}')
+#     # return redirect(authorization_url)
+
 def start_authorization(request):
     host_name = request.get_host()
-    print(":host_name", host_name)
+
     if 'HTTP_X_FORWARDED_PROTO' in request.META:
         protocol = request.META['HTTP_X_FORWARDED_PROTO']
     else:
-        # If the header is not present, use the scheme attribute
         protocol = request.scheme
 
-    print("protocolprotocolprotocol", protocol)
-
-    # Construct the authorization URL
     redirect_uri = f'{protocol}://{host_name}/handle-authorization/'  # Change to your desired URL
-    print("redirect_uri", redirect_uri)
+
     authorization_url = (
         f'https://api.nylas.com/oauth/authorize?'
         f'client_id={NYLAS_CLIENT_ID}&redirect_uri={redirect_uri}&response_type=code'
     )
-    print("authorization_url", authorization_url)
-    payload = {}
-    headers = {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-    }
-    response = requests.request("GET", authorization_url, headers=headers, data=payload)
-
-    print('fhjsdgfjgskd fghjksdghj', response.json())
 
     # Redirect the user to the Nylas authorization URL
     return redirect(authorization_url)
-
-
 def micro_start_authorization(request):
     host_name = request.get_host()
     print(":host_name", host_name)
