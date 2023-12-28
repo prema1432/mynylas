@@ -31,15 +31,19 @@
 <hr>
 <form method="post">
   {% csrf_token %}
-  {{ form.as_p }}
+{{ form.as_p }}
   <input class="button" type="submit" value="Submit">
 </form>
 {%  if errors %}
 <p style="color: red;font-weight: bold">{{ errors }}</p>
 {% endif %}
 
-<p><a class="button" href="{% url 'send_email' %}">Send Mail</a> &nbsp;<a class="button" href="{% url 'read_emails' %}">Read Mail</a></p>
-<hr>
+<p>
+    <a class="button" href="{% url 'send_email' %}">Send Mail</a> &nbsp;
+    <a class="button" href="{% url 'read_emails' %}">Read Mail</a> &nbsp;
+    <a class="button" href="{% url 'all_nylas_accounts' %}">All Accounts</a> &nbsp;
+
+</p><hr>
 {#<P>{{ email_list }}</P>#}
 {%  for email in email_list %}
 {{ forloop.counter }}.  {{ email.subject }} <br>

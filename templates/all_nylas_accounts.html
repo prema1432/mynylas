@@ -1,0 +1,42 @@
+<!-- all_nylas_accounts.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Nylas Accounts</title>
+</head>
+<body>
+    <h1>All Nylas Accounts</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Account ID</th>
+                <th>Email Address</th>
+                <th>billing_state</th>
+                <th>provider</th>
+                <th>sync_state</th>
+                                <th>Delete</th>
+
+            </tr>
+        </thead>
+        <tbody>
+{#        {{ account_data }}#}
+            {% for account in account_data %}
+                <tr>
+                    <td>{{ account.id }}</td>
+                    <td>{{ account.email_address }}</td>
+                    <td>{{ account.billing_state }}</td>
+                    <td>{{ account.provider }}</td>
+                    <td>{{ account.sync_state }}</td>
+                  <td>
+                        <form method="post" action="{% url 'all_nylas_accounts' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="delete_account_id" value="{{ account.id }}">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

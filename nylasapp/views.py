@@ -261,11 +261,13 @@ def send_email(request):
     # nyls_access_token = "i5BxeE9hjhWiji2CQhxdNdGKhc5jD5"
 
     if request.method == 'POST':
-        form = UserAccountForm(request.POST)
-        if form.is_valid():
-            selected_email_address = form.cleaned_data['user_account']
+        # userform = UserAccountForm(request.POST)
+        # if userform.is_valid():
+            selected_email_address =request.POST.get('user_account')
             selected_user_account = UserAccount.objects.get(email_address=selected_email_address)
             nylas_access_token = selected_user_account.access_token
+            print("selected_email_address",selected_email_address)
+            print("nylas_access_token",nylas_access_token)
 
             # Replace 'YOUR_CLIENT_ID' and 'YOUR_CLIENT_SECRET' with your actual Nylas API credentials
 
@@ -277,11 +279,12 @@ def send_email(request):
                 access_token=nylas_access_token
 
             )
+            print("nylas_client",nylas_client)
             # Extract input from the form
             to_email = request.POST.get('to_email')
             subject = request.POST.get('subject')
             body = request.POST.get('body')
-
+            print("to_email",to_email)
             try:
                 # Create the draft message
                 draft = nylas_client.drafts.create(
@@ -289,6 +292,7 @@ def send_email(request):
                     subject=subject,
                     body=body,
                 )
+                print("draftdraft",draft)
 
                 # Send the draft
                 draft.send()
@@ -296,11 +300,79 @@ def send_email(request):
                 message = "Email sent successfully."
             except Exception as e:
                 message = f"Error sending email: {str(e)}"
-
+        # else:
+        #     message = f"Email sent failed {form.errors}"
         # Render the template with the message
         # return render(request, 'send_email.html', {'message': message})
-    else:
-        form = UserAccountForm()
+    # else:
+    #     userform = UserAccountForm()
 
     # Render the initial form
-    return render(request, 'send_email.html', {'message': None,"form":form})
+    return render(request, 'send_email.html', {'message': None})
+
+# def all_nylas_accounts(request):
+#     # Initialize Nylas client
+#     nylas_client = nylas.APIClient(
+#         client_id=NYLAS_CLIENT_ID,
+#         client_secret=NYLAS_CLIENT_SECRET,
+#         # access_token=NYLAS_API_KEY,
+#     )
+#
+#     # Fetch all Nylas accounts
+#     nylas_accounts = nylas_client.accounts.all()
+#     # account_data = nylas_accounts
+#     # Extract relevant information from each account
+#     account_data = [
+#         {
+#             'id': account.id,
+#             'email_address': account.email,
+#             'billing_state': account.billing_state,
+#             'provider': account.provider,
+#             'sync_state': account.sync_state,
+#             # Add more fields as needed
+#         }
+#         for account in nylas_accounts
+#     ]
+#
+#     return render(request, 'all_nylas_accounts.html', {'account_data': account_data})
+def all_nylas_accounts(request):
+    nylas_client = nylas.APIClient(
+        client_id=NYLAS_CLIENT_ID,
+        client_secret=NYLAS_CLIENT_SECRET,
+        # access_token=settings.NYLAS_API_KEY,
+    )
+
+    if request.method == 'POST':
+        # Handle account deletion
+        account_id_to_delete = request.POST.get('delete_account_id')
+        if account_id_to_delete:
+            print("account_id_to_delete",account_id_to_delete)
+            try:
+                # Delete the account from the Nylas API
+                # nylas_client.accounts.get(account_id=account_id_to_delete).delete()
+                nylas_client.accounts.delete(account_id_to_delete)
+
+                # Optionally, delete the account from your database
+                UserAccount.objects.filter(id=account_id_to_delete).delete()
+
+                return redirect('all_nylas_accounts')
+            except Exception as e:
+                # Handle errors, e.g., account not found or API request failed
+                print(f"Error deleting account: {str(e)}")
+
+    nylas_accounts = nylas_client.accounts.all()
+
+    account_data = [
+        {
+            'id': account.id,
+            'email_address': account.email,
+            'billing_state': account.billing_state,
+            'provider': account.provider,
+            'sync_state': account.sync_state,
+            # Add more fields as needed
+        }
+        for account in nylas_accounts
+    ]
+
+
+    return render(request, 'all_nylas_accounts.html', {'account_data': account_data})
