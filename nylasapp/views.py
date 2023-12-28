@@ -261,38 +261,46 @@ def send_email(request):
     # nyls_access_token = "i5BxeE9hjhWiji2CQhxdNdGKhc5jD5"
 
     if request.method == 'POST':
-        # Replace 'YOUR_CLIENT_ID' and 'YOUR_CLIENT_SECRET' with your actual Nylas API credentials
+        form = UserAccountForm(request.POST)
+        if form.is_valid():
+            selected_email_address = form.cleaned_data['user_account']
+            selected_user_account = UserAccount.objects.get(email_address=selected_email_address)
+            nylas_access_token = selected_user_account.access_token
 
-        #
-        # nylas_client = nylas.APIClient(client_id=client_id, client_secret=client_secret)
-        nylas_client = nylas.APIClient(
-            client_id=NYLAS_CLIENT_ID,
-            client_secret=NYLAS_CLIENT_SECRET,
-            access_token=nyls_access_token
+            # Replace 'YOUR_CLIENT_ID' and 'YOUR_CLIENT_SECRET' with your actual Nylas API credentials
 
-        )
-        # Extract input from the form
-        to_email = request.POST.get('to_email')
-        subject = request.POST.get('subject')
-        body = request.POST.get('body')
+            #
+            # nylas_client = nylas.APIClient(client_id=client_id, client_secret=client_secret)
+            nylas_client = nylas.APIClient(
+                client_id=NYLAS_CLIENT_ID,
+                client_secret=NYLAS_CLIENT_SECRET,
+                access_token=nylas_access_token
 
-        try:
-            # Create the draft message
-            draft = nylas_client.drafts.create(
-                to=[{'email': to_email}],
-                subject=subject,
-                body=body,
             )
+            # Extract input from the form
+            to_email = request.POST.get('to_email')
+            subject = request.POST.get('subject')
+            body = request.POST.get('body')
 
-            # Send the draft
-            draft.send()
+            try:
+                # Create the draft message
+                draft = nylas_client.drafts.create(
+                    to=[{'email': to_email}],
+                    subject=subject,
+                    body=body,
+                )
 
-            message = "Email sent successfully."
-        except Exception as e:
-            message = f"Error sending email: {str(e)}"
+                # Send the draft
+                draft.send()
+
+                message = "Email sent successfully."
+            except Exception as e:
+                message = f"Error sending email: {str(e)}"
 
         # Render the template with the message
-        return render(request, 'send_email.html', {'message': message})
+        # return render(request, 'send_email.html', {'message': message})
+    else:
+        form = UserAccountForm()
 
     # Render the initial form
-    return render(request, 'send_email.html', {'message': None})
+    return render(request, 'send_email.html', {'message': None,"form":form})
