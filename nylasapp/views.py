@@ -1,3 +1,5 @@
+import json
+
 from django.shortcuts import render, redirect
 
 import requests
@@ -46,7 +48,75 @@ def start_authorization(request):
     }
     response = requests.request("GET", authorization_url, headers=headers, data=payload)
 
-    print('fhjsdgfjgskd fghjksdghj',response.text)
+    print('fhjsdgfjgskd fghjksdghj',response.json())
+
+    # Redirect the user to the Nylas authorization URL
+    return redirect(authorization_url)
+
+def micro_start_authorization(request):
+    host_name = request.get_host()
+    print(":host_name",host_name)
+    if 'HTTP_X_FORWARDED_PROTO' in request.META:
+        protocol = request.META['HTTP_X_FORWARDED_PROTO']
+    else:
+        # If the header is not present, use the scheme attribute
+        protocol = request.scheme
+
+    print("protocolprotocolprotocol",protocol)
+
+    # Construct the authorization URL
+    redirect_uri = f'{protocol}://{host_name}/handle-authorization/'  # Change to your desired URL
+    print("redirect_uri",redirect_uri)
+    authorization_url = (
+        f'https://api.nylas.com/oauth/authorize?'
+        f'client_id={NYLAS_CLIENT_ID}&redirect_uri={redirect_uri}&response_type=code&login_hint=talamarlapremanath143@gmail.com'
+    )
+    print("authorization_url",authorization_url)
+    payload = {}
+    headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+    }
+    response = requests.request("GET", authorization_url, headers=headers, data=payload)
+
+    print('fhjsdgfjgskd fghjksdghj',response.json())
+
+    # Redirect the user to the Nylas authorization URL
+    return redirect(authorization_url)
+
+def yahoo_start_authorization(request):
+    host_name = request.get_host()
+    print(":host_name",host_name)
+    if 'HTTP_X_FORWARDED_PROTO' in request.META:
+        protocol = request.META['HTTP_X_FORWARDED_PROTO']
+    else:
+        # If the header is not present, use the scheme attribute
+        protocol = request.scheme
+
+    print("protocolprotocolprotocol",protocol)
+
+    # Construct the authorization URL
+    redirect_uri = f'{protocol}://{host_name}/handle-authorization/'  # Change to your desired URL
+    print("redirect_uri",redirect_uri)
+    authorization_url = (
+        f'https://api.nylas.com/connect/authorize')
+    print("authorization_url",authorization_url)
+    payload = json.dumps({
+        "client_id": NYLAS_CLIENT_ID,
+        "name": "premanath",
+        "email_address": "premanath@myyahoo.com",
+        "provider": "yahoo",
+        "settings": {
+            "password": "Prema@143"
+        }
+    })
+    headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+    }
+    response = requests.request("POST", authorization_url, headers=headers, data=payload)
+
+    print('fhjsdgfjgskd fghjksdghj',response.json())
 
     # Redirect the user to the Nylas authorization URL
     return redirect(authorization_url)
@@ -61,3 +131,4 @@ def handle_authorization(request):
 
     # Example: Display the authorization code (remove this in a production environment)
     return HttpResponse(f'Authorization Code: {authorization_code}')
+
