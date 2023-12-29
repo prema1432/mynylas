@@ -140,6 +140,26 @@ def start_authorization(request):
     # Redirect the user to the Nylas authorization URL
     return redirect(authorization_url)
 
+def retry_authorization(request):
+    email=request.GET.get('email')
+    host_name = request.get_host()
+
+    if 'HTTP_X_FORWARDED_PROTO' in request.META:
+        protocol = request.META['HTTP_X_FORWARDED_PROTO']
+    else:
+        protocol = request.scheme
+
+    redirect_uri = f'{protocol}://{host_name}/handle-authorization/'  # Change to your desired URL
+
+    authorization_url = (
+        f'https://api.nylas.com/oauth/authorize?'
+        f'client_id={NYLAS_CLIENT_ID}&redirect_uri={redirect_uri}&response_type=code&login_hint={email}'
+    )
+    print("authorization_url",authorization_url)
+
+    # Redirect the user to the Nylas authorization URL
+    return redirect(authorization_url)
+
 def micro_start_authorization(request):
     host_name = request.get_host()
     print(":host_name", host_name)

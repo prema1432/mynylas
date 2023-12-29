@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import read_emails, handle_authorization, start_authorization, micro_start_authorization, \
-    yahoo_start_authorization, send_email, all_nylas_accounts
+    yahoo_start_authorization, send_email, all_nylas_accounts, retry_authorization
 
 urlpatterns = [
     path('read-emails/', read_emails, name='read_emails'),
@@ -10,5 +10,6 @@ urlpatterns = [
     path('handle-authorization/', handle_authorization, name='handle_authorization'),
     path('send_email/', send_email, name='send_email'),
     path('', all_nylas_accounts, name='all_nylas_accounts'),
+    path('retry-authorization/', retry_authorization, name='retry_authorization'),
 
 ]
