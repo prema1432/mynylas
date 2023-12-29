@@ -74,9 +74,18 @@
                 <td>{{ forloop.counter }}</td>
                 <td>{{ email.date }}</td>
                 <td>{{ email.subject }}</td>
-                <td>{{ email.from_mail }}</td>
+                <td>
+{% for email in email.from_mail %}
+    EMail : {{ email.email }} <br>
+    Name : {{ email.name }}
+    {% endfor %}
+                </td>
                 <td>{{ email.unread }}</td>
-                <td>{{ email.labels }}</td>
+                <td>{{ email.labels }}
+                    {% for label in email.labels %}
+                        {{ label.display_name }} -
+                        {% endfor %}
+                </td>
             </tr>
         {% endfor %}
     </tbody>
