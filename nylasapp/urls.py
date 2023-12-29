@@ -9,6 +9,6 @@ urlpatterns = [
     path('yahoo-authorization/', yahoo_start_authorization, name='yahoo_start_authorization'),
     path('handle-authorization/', handle_authorization, name='handle_authorization'),
     path('send_email/', send_email, name='send_email'),
-    path('all-nylas-accounts/', all_nylas_accounts, name='all_nylas_accounts'),
+    path('', all_nylas_accounts, name='all_nylas_accounts'),
 
 ]
