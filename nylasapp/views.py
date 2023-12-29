@@ -135,7 +135,7 @@ def start_authorization(request):
 
     authorization_url = (
         f'https://api.nylas.com/oauth/authorize?'
-        f'client_id={NYLAS_CLIENT_ID}&redirect_uri={redirect_uri}&response_type=code'
+        f'client_id={NYLAS_CLIENT_ID}&redirect_uri={redirect_uri}&response_type=code&scopes=email.read_only,email.send'
     )
     print("authorization_url",authorization_url)
 
@@ -155,7 +155,7 @@ def retry_authorization(request):
 
     authorization_url = (
         f'https://api.nylas.com/oauth/authorize?'
-        f'client_id={NYLAS_CLIENT_ID}&redirect_uri={redirect_uri}&response_type=code&login_hint={email}'
+        f'client_id={NYLAS_CLIENT_ID}&redirect_uri={redirect_uri}&response_type=code&login_hint={email}&scopes=email.read_only,email.send'
     )
     print("authorization_url",authorization_url)
 
@@ -316,6 +316,8 @@ def send_email(request):
                     body=body,
                 )
                 print("draftdraft",draft)
+                draft.tracking = {'links': 'false', 'opens': 'true', 'thread_replies': 'true',
+                                  'payload': 'python sdk open tracking test'}
 
                 # Send the draft
                 draft.send()
