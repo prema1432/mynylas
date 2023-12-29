@@ -282,7 +282,7 @@ def handle_authorization(request):
 
 def send_email(request):
     # nyls_access_token = "i5BxeE9hjhWiji2CQhxdNdGKhc5jD5"
-
+    user_accounts = UserAccount.objects.all()
     if request.method == 'POST':
         # userform = UserAccountForm(request.POST)
         # if userform.is_valid():
@@ -336,7 +336,7 @@ def send_email(request):
     #     userform = UserAccountForm()
 
     # Render the initial form
-    return render(request, 'send_email.html', {'message': None})
+    return render(request, 'send_email.html', {'message': None,"user_accounts":user_accounts})
 
 # def all_nylas_accounts(request):
 #     # Initialize Nylas client
@@ -406,7 +406,7 @@ def all_nylas_accounts(request):
                 if account_to_retry_sync:
 
                     print(f"Account to retry sync",account_to_retry_sync)
-                    account_to_retry_sync.revoke_all()
+                    account_to_retry_sync.downgrade()
                 else:
                     print("Account not found")
 

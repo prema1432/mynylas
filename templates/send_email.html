@@ -58,7 +58,9 @@
         <p>
     <label for="id_user_account">Select User Account:</label>
     <select name="user_account" id="id_user_account">
-  <option value="talamarla.premanath@gmail.com">talamarla.premanath@gmail.com</option>
+        {% for each in user_accounts %}
+  <option value={{ each.email_address }}>{{ each.email_address}}</option>
+        {% endfor %}
 
 </select>
 

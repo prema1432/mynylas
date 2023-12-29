@@ -81,7 +81,7 @@
     {% endfor %}
                 </td>
                 <td>{{ email.unread }}</td>
-                <td>{{ email.labels }}
+                <td>
                     {% for label in email.labels %}
                         {{ label.display_name }} -
                         {% endfor %}
