@@ -72,8 +72,10 @@ def read_emails(request):
                 inbox_emails = [
                     {
                         'subject': message.subject,
-                        'date': message.date,
-                        'from_mail': message.from_email,
+                        'date': message.received_at,
+                        'from_mail': message.from_,
+                        'unread': message.unread,
+                        'labels': message._labels,
                     }
                     for message in email_list
                 ]

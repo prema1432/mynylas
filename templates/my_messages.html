@@ -56,8 +56,30 @@
 
 </p><hr>
 {#<P>{{ email_list }}</P>#}
-{%  for email in email_list %}
-{{ forloop.counter }}.  {{ email.subject }} <br>
-{% endfor %}
+<table border="1" style="width: 100%">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Date</th>
+            <th>Subject</th>
+            <th>From</th>
+            <th>Unread</th>
+            <th>Label</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for email in email_list %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ email.date }}</td>
+                <td>{{ email.subject }}</td>
+                <td>{{ email.from_mail }}</td>
+                <td>{{ email.unread }}</td>
+                <td>{{ email.labels }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 </body>
 </html>
