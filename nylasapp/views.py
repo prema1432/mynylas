@@ -248,6 +248,7 @@ def handle_authorization(request):
                 **{lookup_field: email_address},
                 defaults=defaults
             )
+            return redirect('all_nylas_accounts')
             # UserAccount.objects.create()
         except Exception as e:
             print("Exception occureddownloading data",e)
