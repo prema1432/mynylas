@@ -7,6 +7,8 @@ class UserAccount(models.Model):
     provider = models.CharField(max_length=100)
     token_type = models.CharField(max_length=100)
     status= models.CharField(max_length=100,null=True,blank=True,default="stopped")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.email_address
