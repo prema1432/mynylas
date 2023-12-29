@@ -57,7 +57,7 @@
                 <th>provider</th>
                 <th>sync_state</th>
                                 <th>Delete</th>
-                <th>Retry Sync</th>
+{#                <th>Retry Sync</th>#}
                 <th>ReLogin</th>
 
             </tr>
@@ -78,13 +78,13 @@
                             <button class="button cbr" type="submit">Delete</button>
                         </form>
                     </td>
-                <td>
-                        <form method="post" action="{% url 'all_nylas_accounts' %}">
-                            {% csrf_token %}
-                            <input type="hidden" name="retry_sync_account_id" value="{{ account.id }}">
-                            <button class="button cbg" type="submit">Retry Sync</button>
-                        </form>
-                    </td>
+{#                <td>#}
+{#                        <form method="post" action="{% url 'all_nylas_accounts' %}">#}
+{#                            {% csrf_token %}#}
+{#                            <input type="hidden" name="retry_sync_account_id" value="{{ account.id }}">#}
+{#                            <button class="button cbg" type="submit">Retry Sync</button>#}
+{#                        </form>#}
+{#                    </td>#}
                 <td>
 <a class="button" href="{% url 'retry_authorization' %}?email={{ account.email_address }}">Retry Authorization</a>
 
