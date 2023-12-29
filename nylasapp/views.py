@@ -37,7 +37,7 @@ def read_emails(request):
     # nylas_access_token = "i5BxeE9hjhWiji2CQhxdNdGKhc5jD5"
     # nylas_access_token = ""
     inbox_emails ={}
-
+    threads={}
     errors= None
     if request.method == 'POST':
         form = UserAccountForm(request.POST)
@@ -68,9 +68,10 @@ def read_emails(request):
 
             try:
                 email_list = nylas_client.messages.all(limit=15)
-                print("email_list 876yijh" ,email_list)
+                # print("email_list 876yijh" ,email_list)
                 inbox_emails = [
                     {
+                        'id': message.id,
                         'subject': message.subject,
                         'date': message.received_at,
                         'from_mail': message.from_,
@@ -79,6 +80,46 @@ def read_emails(request):
                     }
                     for message in email_list
                 ]
+
+                # threads = nylas_client.threads.all(limit=10)
+                # for thread in threads:
+                #     print("Subject: {} | Participants: {}".format(
+                #         thread.subject, thread.participants
+                #     )
+                #     )
+                #
+                # for thread in nylas_client.threads.where(unread=True, limit=5):
+                #     print(thread.subject)
+
+                message_data = nylas_client.messages.get("djlhpp6lq6frhvhq9j8hb8x4u")
+                print("egwrgerger 768",message_data)
+
+                if 'tracking' in message_data:
+                    open_tracking_enabled = message_data['tracking'].get('opens', False)
+                    print(f"Message ID: {message_data.id}")
+                    print(f"Open Tracking Enabled: {open_tracking_enabled}")
+                else:
+                    print(f"Message ID: {message_data.id}")
+                    print("Open Tracking is not enabled for this message.")
+
+                # print("messagemessage",message.tracking)
+                # for message_data in message_data:
+                #     # Retrieve the full message using the message ID
+                #     message = nylas_client.messages.get(message_data['id'])
+                #
+                #     # Check if tracking is enabled for the message
+                #     if 'tracking' in message_data:
+                #         print(f"Message ID: {message.id}")
+                #         print(f"Tracking Settings: {message_data['tracking']}")
+                #         print("---")
+                #     else:
+                #         print(f"Message ID: {message.id}")
+                #         print("Tracking is not enabled for this message.")
+                #         print("---")
+
+                # thread = nylas_client.threads.search("to:talamarlapremanath@gmail.com")
+                # print("threadthread",thread)
+
             except Exception as e:
                 errors =str(e)
                 print("exception occured as",e)
@@ -89,7 +130,7 @@ def read_emails(request):
 
 
 
-    return render(request, 'my_messages.html', {'email_list': inbox_emails, 'form': form,"errors":errors})
+    return render(request, 'my_messages.html', {'email_list': inbox_emails, 'form': form,"errors":errors,"threads":threads})
 
 # def start_authorization(request):
 #     host_name = request.get_host()
@@ -314,10 +355,14 @@ def send_email(request):
                     to=[{'email': to_email}],
                     subject=subject,
                     body=body,
+                    tracking={'opens': "true",
+                              'payload': 'python sdk open tracking test'}
+
                 )
+
                 print("draftdraft",draft)
-                draft.tracking = {'links': 'false', 'opens': 'true', 'thread_replies': 'true',
-                                  'payload': 'python sdk open tracking test'}
+                # draft.tracking = {'links': 'false', 'opens': 'true', 'thread_replies': 'true',
+                #                   'payload': 'python sdk open tracking test'}
 
                 # Send the draft
                 draft.send()

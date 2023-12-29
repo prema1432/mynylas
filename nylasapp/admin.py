@@ -2,5 +2,7 @@ from django.contrib import admin
 
 from nylasapp.models import UserAccount
 
-# Register your models here.
-admin.site.register(UserAccount)
+
+@admin.register(UserAccount)
+class UserAccountAdmin(admin.ModelAdmin):
+    list_display = ('email_address', 'created_at', 'updated_at', 'status')

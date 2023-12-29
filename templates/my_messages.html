@@ -73,7 +73,10 @@
             <tr>
                 <td>{{ forloop.counter }}</td>
                 <td>{{ email.date }}</td>
-                <td>{{ email.subject }}</td>
+                <td>{{ email.subject }}
+                    <br>
+                    {{ email.id}}
+                </td>
                 <td>
 {% for email in email.from_mail %}
     EMail : {{ email.email }} <br>
@@ -90,5 +93,6 @@
         {% endfor %}
     </tbody>
 </table>
+{{ threads }}
 </body>
 </html>
