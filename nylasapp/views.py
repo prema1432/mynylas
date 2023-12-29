@@ -393,18 +393,24 @@ def all_nylas_accounts(request):
         account_id_to_retry_sync = request.POST.get('retry_sync_account_id')
         if account_id_to_retry_sync:
             try:
-                selected_user_account = UserAccount.objects.get(account_id=account_id_to_retry_sync)
-                nylas_access_token = selected_user_account.access_token
-                nylas_client_1 = nylas.APIClient(
-                    client_id=NYLAS_CLIENT_ID,
-                    client_secret=NYLAS_CLIENT_SECRET,
-                    access_token=nylas_access_token,
-                )
-                print("nylas_client_1",nylas_client_1)
+                # selected_user_account = UserAccount.objects.get(account_id=account_id_to_retry_sync)
+                # nylas_access_token = selected_user_account.access_token
+                # nylas_client_1 = nylas.APIClient(
+                #     client_id=NYLAS_CLIENT_ID,
+                #     client_secret=NYLAS_CLIENT_SECRET,
+                #     access_token=nylas_access_token,
+                # )
+                # print("nylas_client_1",nylas_client_1)
 
-                account_to_retry_sync = nylas_client_1.accounts.get(account_id_to_retry_sync)
-                print(f"Account to retry sync",account_to_retry_sync)
-                account_to_retry_sync.sync()
+                account_to_retry_sync = nylas_client.accounts.get(account_id_to_retry_sync)
+                if account_to_retry_sync:
+
+                    print(f"Account to retry sync",account_to_retry_sync)
+                    account_to_retry_sync.revoke_all()
+                else:
+                    print("Account not found")
+
+
                 # Retry syncing the account
                 # nylas_client.accounts.retry_sync(account_id_to_retry_sync)
             except Exception as e:
