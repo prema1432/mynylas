@@ -318,7 +318,10 @@ def send_email(request):
                 # Send the draft
                 draft.send()
 
+
                 message = "Email sent successfully."
+                return redirect('read_emails')
+
             except Exception as e:
                 message = f"Error sending email: {str(e)}"
         # else:
